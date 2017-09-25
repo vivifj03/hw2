@@ -1,0 +1,91 @@
+---
+title: "Homework 2: R programming"
+author: "Viviana Alejandra Rodriguez Romero"
+date: "September 27, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 2   
+
+Install UsingR package. https://cran.r-project.org/web/packages/UsingR/index.html     
+
+* Explore its content, select any dataset you find interesting to explore and visualize     
+
+* Perform Exploratory Data Analysis (EDA) on it. Examples what to describe and comment on include:    
+
+    + Check the dimensions   
+
+    + Check classes of variables in rows and columns   
+
+    + Check summary statistics for rows/columns    
+
+    + Summarize and describe categorical values, if any    
+
+    + Display rows/columns as a table sorted by min/max value. Hint: Use **DT::datatable**    
+
+    + Visualized boxplots of rows/columns, where appropriate. Plot data on different scales on separate boxplots     
+
+    + Visualize data using histograms and/or density plots, if relevant     
+
+    + Make any other dataset-specific plots, e.g., plotting one variable vs. the other, performing linear regression on it     
+
+    + Comment on your exploration of the data
+    
+```{r  message=FALSE}    
+library(UsingR)
+library(ggplot2)
+library(gridExtra)
+```  
+
+It is believed that using cell phones while driving affects the driver's attention, decreasing the reaction time to external events. The **reaction.time** dataset has simulated data of an experiment to assess the response time to an external event in two experimental groups. The first group assumed that the drivers were using cell phones while driving, whereas in the control group, drivers did not use cell phones.         
+
+```{r}   
+data(reaction.time)
+ncol(reaction.time) #number of variables
+nrow(reaction.time) #number of subjects
+table(reaction.time$control) #Subjects per group
+
+p1<-ggplot(data=reaction.time, aes(x=age)) + geom_bar(aes(y = 100*(..count..)/sum(..count..))) +
+  xlab("Age") + ylab("%") +  theme(panel.background = element_blank(), plot.title = element_text(size=10, hjust = 0.5)) + 
+  ggtitle("Distribution by age")
+p2<-ggplot(data=reaction.time, aes(x=gender)) + geom_bar(aes(y = 100*(..count..)/sum(..count..))) +
+  xlab("Sex") + ylab("%") +  theme(panel.background = element_blank(),plot.title = element_text(size=10, hjust = 0.5)) + 
+  ggtitle("Distribution by sex")
+grid.arrange(p1, p2, ncol=2, top="Figure 1. Demographic characteristics of the subjects under study ")
+```   
+
+```{r}
+#Time reaction descriptives
+summary(reaction.time$time)
+
+p1<- ggplot(data=reaction.time, aes(time)) +
+         geom_histogram(bins=10,color="black", fill="white") + 
+         xlab("Reaction time") + ylab("Count") + 
+        theme(panel.background = element_blank(),plot.title = element_text(size=10, hjust = 0.5)) +
+        ggtitle("Histogram for reaction time")
+p2<- ggplot(data=reaction.time, aes(x = control, y = time)) +
+        geom_boxplot(alpha=0.7) + xlab("Group") + ylab("Reaction time") + 
+        theme(panel.background = element_blank(),plot.title = element_text(size=10, hjust = 0.5)) +
+        ggtitle("Boxplot by group")
+grid.arrange(p1, p2, ncol=2, top="Figure 2. Distribution of reaction time")
+
+p1<- ggplot(data=reaction.time, aes(x = control, y = time, fill = age)) +
+        geom_boxplot(alpha=0.7) + xlab("Group") + ylab("Reaction time") + 
+        theme(panel.background = element_blank(),plot.title = element_text(size=10, hjust = 0.5)) +   
+        ggtitle("Boxplot by group and age")
+p2<-ggplot(data=reaction.time, aes(x = control, y = time, fill = gender)) +
+        geom_boxplot(alpha=0.7) + xlab("Group") + ylab("Reaction time") + 
+        theme(panel.background = element_blank(),plot.title = element_text(size=10, hjust = 0.5)) +   
+        ggtitle("Boxplot by group and  sex")
+grid.arrange(p1, p2, ncol=2, top="Figure 3. Distribution of reaction time by interactions with experimental group")
+```  
+
+
+The dataset has 60 subjects, 40 in the experimental group and 20 in the control group. Fifty percent of the subjects were women and the majority were older than 25 years (Figure 1).
+
+
+
