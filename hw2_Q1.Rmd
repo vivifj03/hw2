@@ -51,6 +51,8 @@ f) Compute the mean of the **Illiteracy** vector from the **new.state** object, 
 ```{r}    
 m<-mean(Illiteracy)
 new.state$resid<-Illiteracy-m
+#The residuals are:
+new.state$resid
 ```
 
 The mean of the **Illiteracy** is `r m`.  The residuals from the mean of **Illiteracy** are storage on **new.state** as **resid** vector.    
@@ -60,13 +62,13 @@ g) Print the elements of **Illiteracy** that are greater than the median illiter
 The elements of **Illiteracy** that are greater than its median are:    
 
 ```{r}    
-new.state[Illiteracy>median(Illiteracy),]$Illiteracy
+new.state[Illiteracy>median(Illiteracy),"Illiteracy",drop=FALSE]
 ```    
 
 The elements of **Murder** that are greater than its median are:    
 
 ```{r}    
-new.state[Murder>median(Murder),]$Murder
+new.state[Murder>median(Murder),"Murder",drop=FALSE]
 ```   
 
 h) Plot **Illiteracy** on the x-axis and Murder on the y-axis. From interacting with the graph, what 3 states have the highest murder rates?
@@ -90,10 +92,19 @@ j) Write a function is.min that returns a logical vector identifying the minimum
 
 ```{r}
 is.min<-function(v){
-v==min(v)  
+   v==min(v)  
 }
 
-mins<-function(v){
-  is.min(v)
+mins<-function(d, v){
+  #d: dataset
+  #v: variable
+  d<-d[is.min(v),]
+  n<-rownames(d)
+  return(n)
 }
+
+mins(d=new.state, v=Illiteracy)
 ```     
+
+The minimum value of Illiteracy is `r min(Illiteracy)` on the states: `r mins(d=new.state, v=Illiteracy)`.      
+
