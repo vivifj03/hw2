@@ -16,6 +16,7 @@ a) Load the built-in dataset **state** into R's memory.
 ```{r}    
 data(state)
 ```
+<br />   
 
 b) List the objects in your R session. Get help for the **state** object.
 
@@ -26,6 +27,8 @@ ls()
 ?state
 ```
 
+<br />     
+
 c) What type of object is **state.x77**?
 
 ```{r}    
@@ -34,17 +37,23 @@ class(state.x77)
 
 **state.x77** is a matrix object.     
 
+<br />     
+
 d) Create a new object called **new.state** that is a **data.frame** based on the data stored in **state.x77**.   
 
 ```{r}    
 new.state<-as.data.frame(state.x77)
 ```   
 
+<br />      
+
 e) Attach the **new.state** object into the search path.    
 
 ```{r}    
 attach(new.state)
 ```
+
+<br />       
 
 f) Compute the mean of the **Illiteracy** vector from the **new.state** object, and its residuals from the mean value.
 
@@ -56,6 +65,8 @@ new.state$resid
 ```
 
 The mean of the **Illiteracy** is `r m`.  The residuals from the mean of **Illiteracy** are storage on **new.state** as **resid** vector.    
+
+<br />      
 
 g) Print the elements of **Illiteracy** that are greater than the median illiteracy. Print the elements of **Murder** that are greater than its median.     
 
@@ -71,6 +82,8 @@ The elements of **Murder** that are greater than its median are:
 new.state[Murder>median(Murder),"Murder",drop=FALSE]
 ```   
 
+<br />       
+
 h) Plot **Illiteracy** on the x-axis and Murder on the y-axis. From interacting with the graph, what 3 states have the highest murder rates?
 
 ```{r}
@@ -80,6 +93,7 @@ q1.h<-identify(Illiteracy, Murder , labels=row.names(new.state)) # identify poin
 
 The states with the highest murder rates are Alabama, Georgia, and Louisiana.    
 
+<br />     
 
 i) The plot function has an optional argument, type, that controls what type of plot is made (points, lines, etc). In particular, **type = 'n'** plots nothing, but sets up and draws axes and axis labels. Use this to generate a scatterplot of **Illiteracy** and **Murder**, but with the state abbreviations labeling the points, instead of the default plotting character.
 
@@ -87,6 +101,8 @@ i) The plot function has an optional argument, type, that controls what type of 
 plot(Illiteracy, Murder, type = 'n')
 text(Illiteracy, Murder,labels=state.abb, cex= 0.5)
 ```  
+
+<br />      
 
 j) Write a function is.min that returns a logical vector identifying the minimum values. Write another function (call it **mins**) that calls **is.min** and returns the numerical indices of the minimum values. Apply mins to the **Illiteracy** vector.
 
@@ -98,9 +114,7 @@ is.min<-function(v){
 mins<-function(d, v){
   #d: dataset
   #v: variable
-  d<-d[is.min(v),]
-  n<-rownames(d)
-  return(n)
+  rownames(d[is.min(v),])
 }
 
 mins(d=new.state, v=Illiteracy)
