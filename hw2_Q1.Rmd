@@ -114,11 +114,14 @@ is.min<-function(v){
 mins<-function(d, v){
   #d: dataset
   #v: variable
-  rownames(d[is.min(v),])
+  a<-which(is.min(v))
+  b<-rownames(d[is.min(v),])
+  c<-cbind(a,b)
+  return(c)
 }
 
 mins(d=new.state, v=Illiteracy)
 ```     
 
-The minimum value of Illiteracy is `r min(Illiteracy)` on the states: `r mins(d=new.state, v=Illiteracy)`.      
+The minimum value of Illiteracy is `r min(Illiteracy)` on the states Iowa, Nevada and South Dakota.           
 

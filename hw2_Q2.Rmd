@@ -1,5 +1,5 @@
 ---
-title: "Homework 2: R programming"
+title: "Homework 2: R programming - Question 2"
 author: "Viviana Alejandra Rodriguez Romero"
 date: "September 27, 2017"
 output: html_document
@@ -35,20 +35,35 @@ Install UsingR package. https://cran.r-project.org/web/packages/UsingR/index.htm
 
     + Comment on your exploration of the data
     
-```{r  message=FALSE}    
+```{r libraries, message=FALSE}    
 library(UsingR)
+library(DT)
 library(ggplot2)
 library(gridExtra)
 ```  
 
+<br />    
+
 It is believed that using cell phones while driving affects the driver's attention, decreasing the reaction time to external events. The **reaction.time** dataset has simulated data of an experiment to assess the response time to an external event in two experimental groups. The first group assumed that the drivers were using cell phones while driving, whereas in the control group, drivers did not use cell phones.         
+
+<br />   
 
 ```{r}   
 data(reaction.time)
 ncol(reaction.time) #number of variables
-nrow(reaction.time) #number of subjects
+nrow(reaction.time) #number of subjects  
 table(reaction.time$control) #Subjects per group
 
+datatable(reaction.time, options = list(order = list(list(4, 'desc'))),
+          colnames = c('Age', 'Sex', 'Group', 'Time'),
+          caption = 'Table 1: Raw data sorted by reaction time')
+
+```    
+
+<br />      
+
+
+```{r warning=FALSE}  
 p1<-ggplot(data=reaction.time, aes(x=age)) + geom_bar(aes(y = 100*(..count..)/sum(..count..))) +
   xlab("Age") + ylab("%") +  theme(panel.background = element_blank(), plot.title = element_text(size=10, hjust = 0.5)) + 
   ggtitle("Distribution by age")
@@ -58,7 +73,10 @@ p2<-ggplot(data=reaction.time, aes(x=gender)) + geom_bar(aes(y = 100*(..count..)
 grid.arrange(p1, p2, ncol=2, top="Figure 1. Demographic characteristics of the subjects under study ")
 ```   
 
-```{r}
+<br />     
+
+
+```{r  warning=FALSE}
 #Time reaction descriptives
 summary(reaction.time$time)
 
@@ -84,8 +102,36 @@ p2<-ggplot(data=reaction.time, aes(x = control, y = time, fill = gender)) +
 grid.arrange(p1, p2, ncol=2, top="Figure 3. Distribution of reaction time by interactions with experimental group")
 ```  
 
+<br />     
 
-The dataset has 60 subjects, 40 in the experimental group and 20 in the control group. Fifty percent of the subjects were women and the majority were older than 25 years (Figure 1).
+```{r}
+#Full model: Model with interactions
+model1<- lm(time ~ control + age + gender + control*age + control*gender,
+            data=reaction.time)
+
+#Model without interactions
+model2<- lm(time ~ control + age + gender ,
+            data=reaction.time)
+anova(model1, model2)
+
+#Final model
+model3<- lm(time ~ control + age, data=reaction.time)
+summary(model3)
+confint(model3)
+```  
+
+<br />     
+
+The dataset has 60 subjects, 40 in the experimental group and 20 in the control group. Fifty percent of the subjects were women, and the majority were older than 25 years (Figure 1). The dataset has four variables; Table 1 shows the raw data.     
+
+The overall average reaction time was 1.427 seconds (min=1.245, max=1.615). Figure 2 shows the boxplot by experimental group. We can see that the group that used cell phones while driving seems to have a higher reaction time as compared with the control group.    
+
+Figure 3 shows the reaction time by experimental group but this time independently by age and sex groups. There seems to be a differential behavior according to age, indicating a possible interaction between the experimental group and the age of the subject that affects the reaction time.
+
+A multiple linear regression was performed to assess the effect of using cellphones while driving, adjusting for age and sex. Using cellphones showed an increment of the reaction time to an external event of 0.07 seconds (95% CI: 0.03, 0.11) after adjusting for age.      
+
+
+
 
 
 

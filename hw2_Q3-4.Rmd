@@ -1,5 +1,5 @@
 ---
-title: "Homework 2: R programming"
+title: "Homework 2: R programming Questions 3 and 4"
 author: "Viviana Alejandra Rodriguez Romero"
 date: "September 27, 2017"
 output: html_document
@@ -43,10 +43,10 @@ q4<-function(p,y,i){
   #p: loan
   #y: years of payments
   #i: interest rate in percent
-  p*((i/1200)*((1+(i/1200))^(12*y)))/((1+(i/1200))^((12*y)-1))
+  p*((i/1200)*((1+(i/1200))^(12*y)))/(((1+(i/1200))^(12*y))-1)
 }
 
 q4(150000, 30, 6.5)
 ```  
 
-If the mortgage is \$150,000 at 6.5% interest rate for 30 years, the monthly payment would be \$816.90. 
+If the mortgage is \$150,000 at 6.5% interest rate for 30 years, the monthly payment would be \$948.10.     
